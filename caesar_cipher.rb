@@ -1,21 +1,25 @@
-$LETTERS_DOWN = "abcdefghijklmnopqrstuvwxyz"
-$LETTERS_UP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+require_relative "lib/caesar_cipher"
 
-def shift_letter(letter, shift_factor)
-  if($LETTERS_DOWN.include?(letter))
-    $LETTERS_DOWN[($LETTERS_DOWN.index(letter) + shift_factor) % 26]
-  elsif($LETTERS_UP.include?(letter))
-    $LETTERS_UP[($LETTERS_UP.index(letter) + shift_factor) % 26]
+def shift_char(char, shift)
+  char_num = char.ord
+  if char_num.between?(65, 90) || char_num.between?(97, 122)
+    shift_letter(char, shift)
   else
-    letter
+    char
   end
 end
 
-def caesar_cipher(text, shift_factor)
-  puts text
-      .chars
-      .map { |letter| shift_letter(letter, shift_factor) }.join
+def shift_letter(letter, shift)
+  base = letter.ord < 97 ? 65 : 97
+  letter_num = letter.ord - base
+  (((letter_num + shift) % 26) + base).chr
 end
 
-caesar_cipher("Jesus loves you!", 5)
-caesar_cipher("This also works.", 26)
+def output_cipher(text, shift_factor)
+  puts text
+    .chars
+    .map { |char| shift_char(char, shift_factor) }.join
+end
+
+output_cipher("Jesus loves you!", 5)
+output_cipher("This also works.", 26)
